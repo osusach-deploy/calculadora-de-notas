@@ -69,11 +69,11 @@
   }
 </script>
 
-<div class="bg-slate-400 p-1 w-fit rounded-lg flex flex-row gap-1 items-center">
+<div class="bg-base-100 p-1 w-fit rounded-lg flex flex-col gap-1 items-center">
   {#each data as ramo, i (i)}
-    <div class="bg-slate-100 p-1 w-fit rounded-lg flex flex-row gap-1">
+    <div class="bg-base-200 p-1 w-fit rounded-lg flex flex-row">
       <button
-        class="btn btn-outline btn-xs h-6"
+        class="btn btn-outline btn-xs h-6 neob-border"
         on:click={() => {
           current_index = i;
         }}>{ramo.nombre}</button
