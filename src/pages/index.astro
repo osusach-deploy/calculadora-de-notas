@@ -4,6 +4,9 @@ import Calculadora from '../components/Calculadora.svelte';
 import Ramo from '../components/Ramo.svelte';
 ---
 <Layout title='Calculadora de Notas'>
-        <Calculadora client:load/>
-        <Ramo client:load/>
+        <div class="m-2">
+                
+                <Calculadora client:load/>
+                <Ramo client:load/>
+        </div>
 </Layout>

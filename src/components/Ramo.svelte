@@ -82,7 +82,8 @@ $: reload = evaluaciones.length;
 
 {#key reload}
 <div class="neob-border bg-base-100 py-5 rounded-lg flex flex-col gap-2">
-  <div class="flex flex-row flex-wrap justify-around items-center">
+
+  <div class="flex flex-col md:flex-row flex-wrap justify-around items-center">
     <div class="flex flex-col p-5 gap-2">
       <p>
 
@@ -103,9 +104,11 @@ $: reload = evaluaciones.length;
         </button>
       </div>
     </div>
-    <div class="flex flex-col items-center">
+    <h1 class="text-center text-xl md:text-3xl">{ramo.nombre}</h1>
+
+    <div class="flex flex-col items-center px-14 pt-24 md:pt-0">
       <div
-        class="w-60 tooltip-warning"
+        class="tooltip-warning before:w-40 md:before:w-60"
         class:tooltip={!da_ponderacion}
         class:tooltip-open={!da_ponderacion}
         data-tip="Las ponderaciones de las notas no suman 1: ({acumulador_ponderaciones.toFixed(
