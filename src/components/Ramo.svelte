@@ -2,46 +2,54 @@
   import { calcular_notas_minimas, calcular_promedio } from "./calculadora";
   import NumberInput from "./NumberInput.svelte";
   import Checkbox from "./Checkbox.svelte";
+  import { ramoData } from "../store";
 
   /** @type {import('./calculadora').Ramo} */
-  export let ramo;
+  let ramo = {};
   /** @type {Array<import('./calculadora').Evaluacion>} */
-  let evaluaciones = ramo.evaluaciones;
+  let evaluaciones = ramo.evaluaciones ? ramo.evaluaciones : [];
 
   let promedio_simple = false,
     da_ponderacion = true;
-  let cantidad = evaluaciones.length,
-    cantidad_temp = cantidad,
-    min = 1,
-    max = 7,
-    promedio = 1,
-    acumulador_ponderaciones = 0;
+
+  let min = 1;
+  let max = 7;
+  let promedio = 1;
+  let acumulador_ponderaciones = 0;
+  let reload;
+
+  ramoData.subscribe(
+    /** @type {import('./calculadora').Ramo} value */
+    (value) => {
+      ramo = value;
+    },
+  );
 
   // Calcular el porcentaje para el radial progress
   $: porcentaje_promedio = promedio >= 1 ? ((promedio - 1) * 100) / 6 : 0;
 
-  // Cambiar la cantidad de evaluaciones cuando cambia cantidad
-  $: {
-    while (evaluaciones.length !== cantidad && cantidad >= 0) {
-      if (evaluaciones.length < cantidad) {
-        evaluaciones.push({
+  // Cambiar la cantidad de evaluaciones cuando cambia evaluaciones
+$:  promedio = calcular_promedio(evaluaciones);
+$: reload = evaluaciones.length;
+  function add_evaluacion() {
+    evaluaciones.push({
           nombre: "",
           nota: 1,
-          ponderacion: 1 / cantidad,
+          ponderacion: 1 / (evaluaciones.length+1),
           es_pendiente: false,
         });
-      } else {
-        evaluaciones.pop();
-      }
-    }
-    promedio = calcular_promedio(evaluaciones);
+        evaluaciones = evaluaciones;
   }
 
+  function pop_evaluacion() {
+    evaluaciones.pop();
+    evaluaciones = evaluaciones;
+  }
   // Recalcular ponderaciones cuando se marca promedio simple
   $: {
     if (promedio_simple) {
       evaluaciones.forEach((item) => {
-        item.ponderacion = 1 / cantidad;
+        item.ponderacion = 1 / evaluaciones.length;
       });
       evaluaciones = evaluaciones;
       promedio = calcular_promedio(evaluaciones);
@@ -70,20 +78,20 @@
     da_ponderacion = Math.round(acumulador_ponderaciones * 100) / 100 === 1;
   }
 
-  // revisar si cantidad no es negativa o sino crashea
-  $: cantidad = cantidad_temp > 0 ? cantidad_temp : cantidad;
 </script>
 
+{#key reload}
 <div class="neob-border bg-base-100 py-5 rounded-lg flex flex-col gap-2">
   <div class="flex flex-row flex-wrap justify-around items-center">
     <div class="flex flex-col p-5 gap-2">
-      <label for="cantidad"
-        >Cantidad de Evaluaciones:
-        <NumberInput id="cantidad" bind:value={cantidad_temp} />
-      </label>
+      <p>
+
+        Cantidad de Evaluaciones:
+      </p>
+        <NumberInput id="cantidad" increment={add_evaluacion} decrement={pop_evaluacion} bind:value={evaluaciones} />
       <Checkbox bind:value={promedio_simple} label="Promedio Simple" />
       <div
-        class="flex flex-col gap-2 w-60 tooltip-warning text-warning-content"
+        class="flex flex-col gap-2 w-60 tooltip-warning text-warning-content "
         class:tooltip={hay_pendientes}
         data-tip="No hay suficientes notas pendientes"
       >
@@ -120,8 +128,7 @@
   </p>
 
   <div class="flex flex-wrap justify-center gap-4">
-    {#if cantidad != 0}
-      {#each [...Array(cantidad).keys()] as i}
+      {#each evaluaciones as evaluacion, i (i)}
         <div
           class="flex flex-col bg-base-300 p-4 gap-4 w-72 neob-border rounded-xl"
         >
@@ -129,40 +136,40 @@
             type="text"
             placeholder="Nombre"
             class="input input-sm w-full max-w-xs neob-border"
-            bind:value={evaluaciones[i].nombre}
+            bind:value={evaluacion.nombre}
           />
           <div class="flex items-center place-content-around">
             <label
               class="neob-border p-1 bg-base-100 w-[9ch] text-center"
-              class:bg-warning={evaluaciones[i].nota < 4}
-              class:bg-error={evaluaciones[i].nota > 7}
+              class:bg-warning={evaluacion.nota < 4}
+              class:bg-error={evaluacion.nota > 7}
               for="nota"
             >
-              Nota: {evaluaciones[i].nota.toFixed(1)}
+              Nota: {evaluacion.nota.toFixed(1)}
             </label>
             <label for="es_pendiente-{i}">Es pendiente?</label>
             <input
               id="es_pendiente-{i}"
               class="checkbox rounded-none"
               type="checkbox"
-              bind:checked={evaluaciones[i].es_pendiente}
+              bind:checked={evaluacion.es_pendiente}
               on:click={() => {
-                evaluaciones[i].nota = 1;
-                evaluaciones[i].es_pendiente = !evaluaciones[i].es_pendiente;
+                evaluacion.nota = 1;
+                evaluacion.es_pendiente = !evaluacion.es_pendiente;
               }}
             />
           </div>
           <input
             id="nota"
             class="range range-md neob-border bg-base-100 disabled:range-info disabled:pointer-events-none"
-            class:range-warning={evaluaciones[i].nota < 4}
-            class:range-error={evaluaciones[i].nota > 7}
-            disabled={evaluaciones[i].es_pendiente}
+            class:range-warning={evaluacion.nota < 4}
+            class:range-error={evaluacion.nota > 7}
+            disabled={evaluacion.es_pendiente}
             type="range"
             {min}
             {max}
             step="0.1"
-            bind:value={evaluaciones[i].nota}
+            bind:value={evaluacion.nota}
           />
           {#if !promedio_simple}
             <div class="divider divider-neutral m-0">Ponderación</div>
@@ -174,7 +181,7 @@
                 min="0"
                 max="1"
                 step="0.01"
-                bind:value={evaluaciones[i].ponderacion}
+                bind:value={evaluacion.ponderacion}
               />
               <input
                 type="number"
@@ -183,12 +190,13 @@
                 min="0"
                 max="1"
                 step="0.01"
-                bind:value={evaluaciones[i].ponderacion}
+                bind:value={evaluacion.ponderacion}
               />
             </div>
           {/if}
         </div>
       {/each}
-    {/if}
   </div>
 </div>
+
+{/key}

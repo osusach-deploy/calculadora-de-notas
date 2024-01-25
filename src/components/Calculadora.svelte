@@ -1,6 +1,7 @@
 <script>
   import Ramo from "./Ramo.svelte";
-
+  import { ramoData } from "../store";
+  
   let str_data = null;
   let current_index = 0;
   if (typeof window !== "undefined" && typeof localStorage !== "undefined") {
@@ -8,38 +9,28 @@
   }
 
   /** @type {Array<import('./calculadora').Ramo>} */
-  let data = [
-    {
-      nombre: "Nuevo Ramo",
-      evaluaciones: [
-        {
-          nombre: "",
-          nota: 1,
-          ponderacion: 0.5,
-          es_pendiente: false,
-        },
-        {
-          nombre: "",
-          nota: 1,
-          ponderacion: 0.5,
-          es_pendiente: false,
-        },
-      ],
-    },
-  ];
+  let data = [{
+    nombre: "Nuevo Ramo",
+    evaluaciones: [
+      {
+        nombre: "",
+        nota: 1,
+        ponderacion: 0.5,
+        es_pendiente: false,
+      },
+      {
+        nombre: "",
+        nota: 1,
+        ponderacion: 0.5,
+        es_pendiente: false,
+      },
+    ],
+  }];
 
   if (str_data !== null) data = JSON.parse(str_data);
 
-  /**
-   * @param {KeyboardEvent} e
-   */
-  function onKeyDown(e) {
-    if (e.key === "s" && e.ctrlKey) {
-      // calc_data.set(data);
-      localStorage.setItem("calc_data", JSON.stringify(data));
-      alert("ramo guardado en ls");
-    }
-  }
+  // Se actualiza el store cuando se cambia el current_index
+  $: ramoData.set(data[current_index]);
 
   function add_ramo() {
     data.push({
@@ -65,8 +56,17 @@
   /** @param {Number} index*/
   function remove_ramo(index) {
     data.splice(index, 1);
+    current_index = 0;
     data = data;
   }
+
+  ramoData.subscribe((value) => {
+    data[current_index] = value;  
+    if (typeof window !== "undefined" && typeof localStorage !== "undefined") {
+
+      localStorage.setItem("calc_data", JSON.stringify(data));
+      console.log("ramo guardado en ls");}
+  });
 </script>
 
 <div class="bg-base-100 p-1 w-fit rounded-lg flex flex-col gap-1 items-center">
@@ -76,6 +76,7 @@
         class="btn btn-outline btn-xs h-6 neob-border"
         on:click={() => {
           current_index = i;
+          ramoData.set(data[current_index]);
         }}>{ramo.nombre}</button
       >
       <button
@@ -92,9 +93,3 @@
     <img src="/plus.svg" alt="Add icon" />
   </button>
 </div>
-
-{#key current_index}
-  <Ramo ramo={data[current_index]} />
-{/key}
-
-<svelte:window on:keydown={onKeyDown} />

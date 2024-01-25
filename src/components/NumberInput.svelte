@@ -1,31 +1,22 @@
 <script>
   export let value = 0;
   export let id = "";
-
-  function increment() {
-    if (value < 999) value += 1;
-  }
-
-  function decrement() {
-    if (value > 1) value -= 1;
-  }
+  export let increment = () => {};
+  export let decrement = () => {};
 </script>
 
 <div class="flex p-1">
   <button
-    class="w-20 h-10 z-[1] ease-linear neob-clickable border-l-0 rounded-l-md bg-error text-error-content"
+    class="w-20 h-10 z-[1] ease-linear neob-clickable rounded-l-md bg-error text-error-content"
     on:click={decrement}>-</button
   >
-  <input
-    class="w-20 h-10 z-[2] text-center text-secondary-content text-lg neob-border-full bg-secondary [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-    type="number"
-    {id}
-    bind:value
-    min="0"
-    max="999"
-  />
+  <label
+    for={id}
+    class="w-20 h-10 z-[2] text-center text-xl leading-[2.25rem] text-secondary-content neob-border-full bg-secondary pointer-events-none"
+    >{value.length}</label>
   <button
-    class="w-20 h-10 z-[3] neob-clickable border-r-0 rounded-r-md bg-success text-success-content"
+    {id}
+    class="w-20 h-10 z-[3] neob-clickable rounded-r-md bg-success text-success-content"
     on:click={increment}>+</button
   >
 </div>
