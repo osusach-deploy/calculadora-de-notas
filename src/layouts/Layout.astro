@@ -1,35 +1,34 @@
 ---
 interface Props {
-	title: string;
+    title: string;
 }
 
 const { title } = Astro.props;
-import '../styles/app.css';
-import '@fontsource-variable/public-sans'
+import "../styles/app.css";
+import "@fontsource-variable/public-sans";
 ---
 
 <!doctype html>
 <html lang="en" data-theme="emerald">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="description" content="Astro description" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="generator" content={Astro.generator} />
-		<title>{title}</title>
-	</head>
-	<body class="svg-bg h-screen">
-		
-	<header class="bg-gradient-to-b from-cyan-500 to-blue-500 p-4 h-[5vh] ">
-		<h1>Lucas Mesias</h1>
-	</header>
-	<main class="min-h-[90vh] svg-bg">
-		<slot />
-	</main>
-	<footer class="bg-gradient-to-b from-cyan-500 to-blue-500 h-[5vh]">
-		<a href="https://www.svgbackgrounds.com/"
-		>Background CSS by svgbackgrounds.com</a
-		>
-	</footer>
-	</body>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="description" content="Astro description" />
+        <meta name="viewport" content="width=device-width" />
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <meta name="generator" content={Astro.generator} />
+        <title>{title}</title>
+    </head>
+    <body class="svg-bg h-screen">
+        <header class="h-[5vh] bg-gradient-to-b from-cyan-500 to-blue-500 p-4">
+            <h1>Lucas Mesias</h1>
+        </header>
+        <main class="svg-bg min-h-[90vh]">
+            <slot />
+        </main>
+        <footer class="h-[5vh] bg-gradient-to-b from-cyan-500 to-blue-500">
+            <a href="https://www.svgbackgrounds.com/"
+                >Background CSS by svgbackgrounds.com</a
+            >
+        </footer>
+    </body>
 </html>
