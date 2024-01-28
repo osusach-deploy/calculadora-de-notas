@@ -1,5 +1,4 @@
 <script>
-    import Ramo from "./Ramo.svelte";
     import { ramoData } from "../store";
 
     let str_data = null;
@@ -32,7 +31,7 @@
     ];
 
     if (str_data !== null) data = JSON.parse(str_data);
-    
+
     ramoData.set(data[current_index]);
 
     ramoData.subscribe((value) => {
@@ -72,40 +71,41 @@
     function remove_ramo(index) {
         data.splice(index, 1);
         current_index = 0;
-        
-        if (index == 0) add_ramo("Nuevo Ramo");
+
+        if (data.length === 0) add_ramo("Nuevo Ramo");
+
         data = data;
         ramoData.set(data[current_index]);
     }
 </script>
 
 <div
-    class="flex flex-row flex-wrap items-center gap-1 rounded-lg bg-base-100 p-1"
+    class="neob-border flex flex-row flex-wrap items-center gap-1 rounded-lg bg-base-100 p-1 {$$props.class}"
 >
     {#each data as ramo, i (i)}
-        <div class="flex w-fit flex-row rounded-lg bg-base-200 p-1">
-            <button
-                class="neob-border btn btn-outline btn-xs z-0 h-6 bg-base-300"
+        <div class="join flex w-fit flex-row rounded-lg p-1">
+                <button
+                class="neob-clickable join-item btn-sm z-0 h-6 bg-base-300"
                 on:click={() => {
                     current_index = i;
                     ramoData.set(data[current_index]);
                 }}>{ramo.nombre}</button
-            >
+                >
             <button
-                class="neob-border btn btn-square btn-outline btn-xs z-10 h-6 bg-base-300"
+                class="neob-clickable px-1 join-item btn-sm z-10 w-fit bg-base-300"
                 on:click={() => {
                     remove_ramo(i);
                 }}
             >
-                <img src="/cross.svg" alt="Delete icon" />
+                <img class="h-5" src="/cross.svg" alt="Delete icon" />
             </button>
         </div>
     {/each}
     <button
-        class="btn btn-square btn-outline btn-xs h-6"
+        class="neob-clickable px-1 rounded-lg btn-sm  z-20 bg-base-300"
         onclick="my_modal_5.showModal()"
     >
-        <img src="/plus.svg" alt="Add icon" />
+        <img class="h-5" src="/plus.svg" alt="Add icon" />
     </button>
 </div>
 
@@ -118,15 +118,15 @@
             type="text"
             bind:value={nombreInput}
             placeholder="Nuevo ramo"
-            class="input"
+            class="input input-bordered"
         />
         <div class="modal-action">
             <form method="dialog">
                 <!-- if there is a button in form, it will close the modal -->
                 <button
-                    class="btn"
+                    class="neob-clickable p-2 bg-primary text-primary-content"
                     on:click={() => {
-                        add_ramo(nombreInput);
+                        add_ramo(nombreInput? nombreInput : "Nuevo Ramo");
                         nombreInput = "";
                     }}>Guardar</button
                 >

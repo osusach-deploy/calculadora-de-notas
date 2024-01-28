@@ -5,8 +5,8 @@ import Ramo from "../components/Ramo.svelte";
 ---
 
 <Layout title="Calculadora de Notas">
-    <div class="m-2">
-        <Calculadora client:load />
-        <Ramo client:load />
+    <div class="m-2 flex flex-col gap-2">
+        <Calculadora client:load class="z-0" />
+        <Ramo client:load class="z-10" />
     </div>
 </Layout>

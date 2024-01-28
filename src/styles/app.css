@@ -37,10 +37,10 @@
     box-shadow: 0px 4px 0px 0px rgba(0, 0, 0, 1);
 }
 .disable-btn {
-    @apply disabled:pointer-events-none disabled:bg-primary/20 disabled:text-neutral/50;
+    @apply disabled:pointer-events-none disabled:bg-primary/20 disabled:text-neutral/90;
 }
 .bg-disabled {
-    @apply bg-secondary/20 text-neutral/50;
+    @apply bg-secondary/20 text-neutral/90;
 }
 :root {
     font-weight: 700;
@@ -64,4 +64,12 @@ input[type="number"]::-webkit-outer-spin-button {
 input[type="number"] {
     -moz-appearance: textfield;
     appearance: textfield;
+}
+
+.bg-random {background-color: #ffffff;
+    opacity: 1;
+    background-image:  linear-gradient(135deg, #f68067 25%, transparent 25%), linear-gradient(225deg, #f68067 25%, transparent 25%), linear-gradient(45deg, #f68067 25%, transparent 25%), linear-gradient(315deg, #f68067 25%, #ffffff 25%);
+    background-position:  40px 0, 40px 0, 0 0, 0 0;
+    background-size: 40px 40px;
+    background-repeat: repeat;
 }

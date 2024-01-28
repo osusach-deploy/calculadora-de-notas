@@ -3,6 +3,7 @@
     import NumberInput from "./NumberInput.svelte";
     import Checkbox from "./Checkbox.svelte";
     import { ramoData } from "../store";
+    import TextInput from "./TextInput.svelte";
 
     /** @type {import('./calculadora').Ramo} */
     let ramo = {};
@@ -93,7 +94,9 @@
 </script>
 
 {#key reload}
-    <div class="neob-border flex flex-col gap-2 rounded-lg bg-base-100 py-5">
+    <div
+        class="neob-border flex flex-col gap-2 rounded-lg bg-base-100 py-5 {$$props.class}"
+    >
         <div
             class="flex flex-col flex-wrap items-center justify-around md:flex-row"
         >
@@ -122,10 +125,14 @@
                     </button>
                 </div>
             </div>
-            <div class="flex items-center gap-1">
-                <h1 class="text-center text-xl md:text-3xl">{ramo.nombre}</h1>
-                <button><img src="/edit.svg" alt="edit button" /></button>
-            </div>
+            <TextInput
+                class="input-lg w-[20ch] text-center text-xl md:text-3xl"
+                bind:value={ramo.nombre}
+                change={() => {
+                    ramo.nombre = ramo.nombre ? ramo.nombre : "Nuevo Ramo";
+                    ramoData.set(ramo);
+                }}
+            />
             <div class="flex flex-col items-center px-14 pt-24 md:pt-0">
                 <div
                     class="tooltip-warning before:w-40 md:before:w-60"
@@ -155,10 +162,9 @@
                 <div
                     class="neob-border flex w-72 flex-col gap-4 rounded-xl bg-base-300 p-4"
                 >
-                    <input
-                        type="text"
+                    <TextInput
                         placeholder="Nombre"
-                        class="neob-border input input-sm w-full max-w-xs"
+                        class="input-sm max-w-xs"
                         bind:value={evaluacion.nombre}
                     />
                     <div class="flex place-content-around items-center">
@@ -171,21 +177,22 @@
                             Nota: {evaluacion.nota.toFixed(1)}
                         </label>
                         <label for="es_pendiente-{i}">Es pendiente?</label>
-                        <!-- <input
-                            class="neob-border focus:neob-border checkbox rounded-none"
-                            type="checkbox"
-                            bind:checked={evaluacion.es_pendiente}
-                        /> -->
                         <Checkbox
                             id="es_pendiente-{i}"
                             value={evaluacion.es_pendiente}
                             click={() => {
                                 evaluacion.nota = 1;
-                                evaluacion.es_pendiente = !evaluacion.es_pendiente;
+                                evaluacion.es_pendiente =
+                                    !evaluacion.es_pendiente;
                                 console.log(evaluacion.es_pendiente);
                             }}
                             class="rounded-none bg-secondary"
-                            ><img class="filter" class:invert={evaluacion.es_pendiente} src="/check.svg" alt="check icon" /></Checkbox
+                            ><img
+                                class="filter"
+                                class:invert={evaluacion.es_pendiente}
+                                src="/check.svg"
+                                alt="check icon"
+                            /></Checkbox
                         >
                     </div>
                     <input

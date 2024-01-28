@@ -1,7 +1,9 @@
 <script>
     export let value = false;
     export let id = "";
-    export let click = () => {value = !value;};
+    export let click = () => {
+        value = !value;
+    };
 </script>
 
 <button
@@ -9,7 +11,7 @@
     {id}
     class="neob-clickable rounded-md text-secondary-content {$$props.class}"
     class:neob-clicked={value}
-    class:bg-disabled={!value}>
-    <slot></slot>
-    </button
+    class:bg-disabled={!value}
 >
+    <slot />
+</button>
