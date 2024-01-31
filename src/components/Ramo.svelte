@@ -94,13 +94,11 @@
 </script>
 
 {#key reload}
-    <div
-        class="neob-border flex flex-col gap-2 rounded-lg bg-base-100 py-5 {$$props.class}"
-    >
+    <div class="flex flex-col gap-2 py-5 {$$props.class}">
         <div
-            class="flex flex-col flex-wrap items-center justify-around md:flex-row"
+            class="flex flex-col flex-wrap gap-4 items-center justify-around md:flex-row"
         >
-            <div class="flex flex-col gap-2 p-5">
+            <div class="neob-border flex flex-col gap-2 bg-base-300 p-5">
                 <p>Cantidad de Evaluaciones:</p>
                 <NumberInput
                     id="cantidad"
@@ -125,30 +123,33 @@
                     </button>
                 </div>
             </div>
-            <TextInput
-                class="input-lg w-[20ch] text-center text-xl md:text-3xl"
-                bind:value={ramo.nombre}
-                change={() => {
-                    ramo.nombre = ramo.nombre ? ramo.nombre : "Nuevo Ramo";
-                    ramoData.set(ramo);
-                }}
-            />
-            <div class="flex flex-col items-center px-14 pt-24 md:pt-0">
-                <div
-                    class="tooltip-warning before:w-40 md:before:w-60"
-                    class:tooltip={!da_ponderacion}
-                    class:tooltip-open={!da_ponderacion}
-                    data-tip="Las ponderaciones de las notas no suman 1: ({acumulador_ponderaciones.toFixed(
-                        2,
-                    )})"
-                ></div>
-                <div
-                    class="radial-progress border-4 border-success-content bg-success-content text-3xl"
-                    class:text-error={promedio < 4}
-                    class:text-success={promedio >= 4}
-                    style="--value:{porcentaje_promedio};--size:10rem;"
-                >
-                    {promedio.toFixed(2)}
+            <div class="neob-border bg-base-300 px-10 py-5">
+                <TextInput
+                    class="input-lg w-[20ch] text-center text-xl md:text-3xl"
+                    bind:value={ramo.nombre}
+                    change={() => {
+                        ramo.nombre = ramo.nombre ? ramo.nombre : "Nuevo Ramo";
+                        ramoData.set(ramo);
+                    }}
+                />
+            </div>
+            <div class="neob-border bg-base-300 p-10">
+                <div class="flex flex-col items-center px-14 pt-24 md:pt-0">
+                    <div
+                        class="tooltip tooltip-warning before:w-40 md:before:w-60"
+                        class:tooltip-open={!da_ponderacion}
+                        data-tip="Las ponderaciones de las notas no suman 1: ({acumulador_ponderaciones.toFixed(
+                            2,
+                        )})"
+                    ></div>
+                    <div
+                        class="radial-progress border-4 border-success-content bg-success-content text-3xl"
+                        class:text-error={promedio < 4}
+                        class:text-success={promedio >= 4}
+                        style="--value:{porcentaje_promedio};--size:10rem;"
+                    >
+                        {promedio.toFixed(2)}
+                    </div>
                 </div>
             </div>
         </div>
@@ -160,7 +161,7 @@
         <div class="flex flex-wrap justify-center gap-4">
             {#each evaluaciones as evaluacion, i (i)}
                 <div
-                    class="neob-border flex w-72 flex-col gap-4 rounded-xl bg-base-300 p-4"
+                    class="neob-border flex w-72 flex-col gap-4 rounded-xl bg-base-300 p-4 sm:w-80"
                 >
                     <TextInput
                         placeholder="Nombre"

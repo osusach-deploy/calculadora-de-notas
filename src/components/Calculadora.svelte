@@ -85,7 +85,7 @@
     {#each data as ramo, i (i)}
         <div class="join flex w-fit flex-row rounded-lg p-1">
                 <button
-                class="neob-clickable join-item btn-sm z-0 h-6 bg-base-300"
+                class="neob-clickable join-item btn-sm z-0 h-6 min-w-[10ch] text-left bg-base-300"
                 on:click={() => {
                     current_index = i;
                     ramoData.set(data[current_index]);
