@@ -101,19 +101,19 @@
 </script>
 
 <div
-    class="neob-border flex flex-row flex-wrap items-center gap-1 rounded-lg bg-base-100 p-1 {$$props.class}"
+    class="neob-border flex flex-row flex-wrap items-center gap-1 rounded-xl bg-base-200 p-1 {$$props.class}"
 >
     {#each data as ramo, i (i)}
         <div class="join flex w-fit flex-row rounded-lg p-1">
             <button
-                class="neob-clickable join-item btn-sm z-0 h-6 min-w-[10ch] bg-base-300 text-left"
+                class="neob-clickable join-item btn-sm z-0 h-6 min-w-[10ch] bg-base-100 text-left"
                 on:click={() => {
                     current_index = i;
                     ramoData.set(data[current_index]);
                 }}>{ramo.nombre}</button
             >
             <button
-                class="neob-clickable join-item btn-sm z-10 w-fit bg-base-300 px-1"
+                class="neob-clickable join-item btn-sm z-10 w-fit bg-base-100 px-1"
                 on:click={() => {
                     remove_ramo(i);
                 }}
@@ -123,7 +123,7 @@
         </div>
     {/each}
     <button
-        class="neob-clickable btn-sm z-20 rounded-lg bg-base-300 px-1"
+        class="neob-clickable btn-sm z-20 rounded-lg bg-base-100 px-1"
         onclick="my_modal_5.showModal()"
         aria-label="Add ramo"
     >

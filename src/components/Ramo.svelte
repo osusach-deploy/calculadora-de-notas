@@ -98,7 +98,7 @@
         <div
             class="flex flex-col flex-wrap items-center justify-around gap-4 md:flex-row"
         >
-            <div class="neob-border flex flex-col gap-2 bg-base-300 p-5">
+            <div class="neob-border flex flex-col gap-2 rounded-xl bg-base-200 p-5">
                 <p>Cantidad de Evaluaciones:</p>
                 <NumberInput
                     id="cantidad"
@@ -123,7 +123,7 @@
                     </button>
                 </div>
             </div>
-            <div class="neob-border bg-base-300 px-10 py-3 flex flex-col items-center gap-3">
+            <div class="neob-border bg-base-200 px-10 py-3 rounded-xl flex flex-col items-center gap-3">
                 <TextInput
                     class="input-lg w-[20ch] text-center text-xl md:text-3xl"
                     bind:value={ramo.nombre}
@@ -146,7 +146,7 @@
                     <img class="h-5" src="/export.svg" alt="Export icon" />
                 </button>
             </div>
-            <div class="neob-border bg-base-300 p-10">
+            <div class="neob-border bg-base-200 p-10 rounded-xl">
                 <div class="flex flex-col items-center px-14 pt-24 md:pt-0">
                     <div
                         class="tooltip tooltip-warning before:w-40 md:before:w-60"
@@ -166,7 +166,7 @@
                 </div>
             </div>
         </div>
-        <p class="self-center text-pretty text-center text-sm sm:text-base">
+        <p class="self-center text-pretty text-center text-sm sm:text-base ">
             Marca evaluaciones como pendientes para calcular qué nota necesitas
             para tener promedio 4
         </p>
@@ -174,13 +174,26 @@
         <div class="flex flex-wrap justify-center gap-4">
             {#each evaluaciones as evaluacion, i (i)}
                 <div
-                    class="neob-border flex w-72 flex-col gap-4 rounded-xl bg-base-300 p-4 sm:w-80"
+                    class="neob-border flex w-72 flex-col gap-4 rounded-xl bg-base-200 p-4 sm:w-80"
                 >
-                    <TextInput
-                        placeholder="Nombre"
-                        class="input-sm max-w-xs"
-                        bind:value={evaluacion.nombre}
-                    />
+                    <div class="flex flex-row items-center gap-2">
+
+                        <TextInput
+                            placeholder="Nombre"
+                            class="input-sm grow"
+                            bind:value={evaluacion.nombre}
+                        />
+                        <button
+                        class="neob-clickable w-fit h-fit p-1 bg-error rounded-lg"
+                            on:click={() => pop_evaluacion(i)}
+                            >
+                                <img
+                                    class="h-5"
+                                    src="/trash.svg"
+                                    alt="trash icon"
+                                />
+                        </button>
+                    </div>
                     <div class="flex place-content-around items-center">
                         <label
                             class="neob-border w-[9ch] bg-base-100 p-1 text-center"
