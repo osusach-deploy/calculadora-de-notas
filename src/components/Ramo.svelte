@@ -96,7 +96,7 @@
 {#key reload}
     <div class="flex flex-col gap-2 py-5 {$$props.class}">
         <div
-            class="flex flex-col flex-wrap gap-4 items-center justify-around md:flex-row"
+            class="flex flex-col flex-wrap items-center justify-around gap-4 md:flex-row"
         >
             <div class="neob-border flex flex-col gap-2 bg-base-300 p-5">
                 <p>Cantidad de Evaluaciones:</p>
@@ -123,7 +123,7 @@
                     </button>
                 </div>
             </div>
-            <div class="neob-border bg-base-300 px-10 py-5">
+            <div class="neob-border bg-base-300 px-10 py-3 flex flex-col items-center gap-3">
                 <TextInput
                     class="input-lg w-[20ch] text-center text-xl md:text-3xl"
                     bind:value={ramo.nombre}
@@ -132,6 +132,19 @@
                         ramoData.set(ramo);
                     }}
                 />
+                
+                    <button
+                    class="neob-clickable btn-sm bg-accent z-20 mx-1 flex items-center gap-1 rounded-lg px-3"
+                    aria-label="Export ramo"
+                    on:click={() => {
+                        const data = JSON.stringify(ramo);
+                        navigator.clipboard.writeText(data);
+                        alert("Ramo copiado al portapapeles");
+                    }}
+                >
+                    Exportar
+                    <img class="h-5" src="/export.svg" alt="Export icon" />
+                </button>
             </div>
             <div class="neob-border bg-base-300 p-10">
                 <div class="flex flex-col items-center px-14 pt-24 md:pt-0">

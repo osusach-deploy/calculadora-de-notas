@@ -1,9 +1,11 @@
 <script>
     import { ramoData } from "../store";
+    import TextInput from "./TextInput.svelte";
 
     let str_data = null;
     let current_index = 0;
     let nombreInput = "";
+    let importedData = "";
 
     if (typeof window !== "undefined" && typeof localStorage !== "undefined") {
         str_data = localStorage.getItem("calc_data");
@@ -67,6 +69,25 @@
         data = data;
         ramoData.set(data[current_index]);
     }
+
+    /** @param {string} ramo*/
+    function import_ramo(ramo) {
+        let jsonRamo;
+        try {
+            jsonRamo = JSON.parse(ramo);
+            // Revisar unos casos borde de parse
+            if (!jsonRamo || typeof jsonRamo !== "object")
+                return false;
+        } catch (error) {
+            return false;
+        }
+        data.push(jsonRamo);
+        current_index = data.length - 1;
+        data = data;
+        ramoData.set(data[current_index]);
+        return true;
+    }
+
     /** @param {Number} index*/
     function remove_ramo(index) {
         data.splice(index, 1);
@@ -84,15 +105,15 @@
 >
     {#each data as ramo, i (i)}
         <div class="join flex w-fit flex-row rounded-lg p-1">
-                <button
-                class="neob-clickable join-item btn-sm z-0 h-6 min-w-[10ch] text-left bg-base-300"
+            <button
+                class="neob-clickable join-item btn-sm z-0 h-6 min-w-[10ch] bg-base-300 text-left"
                 on:click={() => {
                     current_index = i;
                     ramoData.set(data[current_index]);
                 }}>{ramo.nombre}</button
-                >
+            >
             <button
-                class="neob-clickable px-1 join-item btn-sm z-10 w-fit bg-base-300"
+                class="neob-clickable join-item btn-sm z-10 w-fit bg-base-300 px-1"
                 on:click={() => {
                     remove_ramo(i);
                 }}
@@ -102,8 +123,9 @@
         </div>
     {/each}
     <button
-        class="neob-clickable px-1 rounded-lg btn-sm  z-20 bg-base-300"
+        class="neob-clickable btn-sm z-20 rounded-lg bg-base-300 px-1"
         onclick="my_modal_5.showModal()"
+        aria-label="Add ramo"
     >
         <img class="h-5" src="/plus.svg" alt="Add icon" />
     </button>
@@ -113,23 +135,42 @@
 <dialog id="my_modal_5" class="modal modal-bottom sm:modal-middle">
     <div class="modal-box">
         <h3 class="text-lg font-bold">Agregar ramo</h3>
-        <p class="py-4">Ingresa el nombre del ramo:</p>
-        <input
-            type="text"
-            bind:value={nombreInput}
-            placeholder="Nuevo ramo"
-            class="input input-bordered"
-        />
         <div class="modal-action">
-            <form method="dialog">
-                <!-- if there is a button in form, it will close the modal -->
-                <button
-                    class="neob-clickable p-2 bg-primary text-primary-content"
+            <form method="dialog" class="flex w-full flex-col gap-4">
+                <p class="py-2">Ingresa el nombre del ramo:</p>
+                <div class="flex">
+                    <TextInput
+                        class="rounded-none mr-2"
+                        bind:value={nombreInput}
+                        placeholder="Nuevo ramo"
+                    />
+                    <button
+                        class="neob-clickable bg-primary p-2 text-primary-content w-28 h-12"
+                        on:click={() => {
+                            add_ramo(
+                                nombreInput ? nombreInput : "Nuevo Ramo",
+                            );
+                            nombreInput = "";
+                        }}>Guardar</button
+                    >
+                </div>
+                <div class="flex">
+                    <TextInput
+                        class="rounded-none mr-2"
+                        bind:value={importedData}
+                        placeholder="Pega tu ramo aquí"
+                    />
+                    <!-- if there is a button in form, it will close the modal -->
+                    <button
                     on:click={() => {
-                        add_ramo(nombreInput? nombreInput : "Nuevo Ramo");
-                        nombreInput = "";
-                    }}>Guardar</button
-                >
+                        if (!import_ramo(importedData)) alert("Error al importar"); importedData = "";}}
+                        class="neob-clickable flex bg-accent text-accent-content items-center justify-center w-28 h-12"
+                        aria-label="Import ramo"
+                    >
+                        Importar
+                        <img class="h-6" src="/import.svg" alt="Import icon" />
+                    </button>
+                </div>
             </form>
         </div>
     </div>
