@@ -76,8 +76,7 @@
         try {
             jsonRamo = JSON.parse(ramo);
             // Revisar unos casos borde de parse
-            if (!jsonRamo || typeof jsonRamo !== "object")
-                return false;
+            if (!jsonRamo || typeof jsonRamo !== "object") return false;
         } catch (error) {
             return false;
         }
@@ -106,7 +105,9 @@
     {#each data as ramo, i (i)}
         <div class="join flex w-fit flex-row rounded-lg p-1">
             <button
-                class="neob-clickable join-item btn-sm z-0 h-6 min-w-[10ch] bg-base-100 text-left"
+                class="neob-clickable join-item btn-sm z-0 h-6 min-w-[10ch] text-left"
+                class:bg-accent={i === current_index}
+                class:bg-base-100={i !== current_index}
                 on:click={() => {
                     current_index = i;
                     ramoData.set(data[current_index]);
@@ -140,31 +141,32 @@
                 <p class="py-2">Ingresa el nombre del ramo:</p>
                 <div class="flex">
                     <TextInput
-                        class="rounded-none mr-2"
+                        class="mr-2 rounded-none"
                         bind:value={nombreInput}
                         placeholder="Nuevo ramo"
                     />
                     <button
-                        class="neob-clickable bg-primary p-2 text-primary-content w-28 h-12"
+                        class="neob-clickable h-12 w-28 bg-primary p-2 text-primary-content"
                         on:click={() => {
-                            add_ramo(
-                                nombreInput ? nombreInput : "Nuevo Ramo",
-                            );
+                            add_ramo(nombreInput ? nombreInput : "Nuevo Ramo");
                             nombreInput = "";
                         }}>Guardar</button
                     >
                 </div>
                 <div class="flex">
                     <TextInput
-                        class="rounded-none mr-2"
+                        class="mr-2 rounded-none"
                         bind:value={importedData}
                         placeholder="Pega tu ramo aquí"
                     />
                     <!-- if there is a button in form, it will close the modal -->
                     <button
-                    on:click={() => {
-                        if (!import_ramo(importedData)) alert("Error al importar"); importedData = "";}}
-                        class="neob-clickable flex bg-accent text-accent-content items-center justify-center w-28 h-12"
+                        on:click={() => {
+                            if (!import_ramo(importedData))
+                                alert("Error al importar");
+                            importedData = "";
+                        }}
+                        class="neob-clickable flex h-12 w-28 items-center justify-center bg-accent text-accent-content"
                         aria-label="Import ramo"
                     >
                         Importar
