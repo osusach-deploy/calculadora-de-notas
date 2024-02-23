@@ -2,6 +2,7 @@
     import { ramoData } from "../store";
     import TextInput from "./TextInput.svelte";
 
+    let promedio = 1;
     let str_data = null;
     let current_index = 0;
     let nombreInput = "";
@@ -15,6 +16,7 @@
     let data = [
         {
             nombre: "Nuevo Ramo",
+            promedio: 1,
             evaluaciones: [
                 {
                     nombre: "",
@@ -43,13 +45,15 @@
             typeof localStorage !== "undefined"
         ) {
             localStorage.setItem("calc_data", JSON.stringify(data));
-            console.log("ramo guardado en ls");
         }
+        promedio =
+            data.reduce((acc, ramo) => acc + ramo.promedio, 0) / data.length;
     });
 
     function add_ramo(nombre) {
         data.push({
             nombre: nombre,
+            promedio: 1,
             evaluaciones: [
                 {
                     nombre: "",
@@ -130,6 +134,11 @@
     >
         <img class="h-5" src="/plus.svg" alt="Add icon" />
     </button>
+    <span class="p-1">
+        <h3 class="neob-border btn-sm h-6 rounded-lg bg-base-100 leading-7">
+            Promedio general: {promedio.toFixed(2)}
+        </h3>
+    </span>
 </div>
 
 <!-- Open the modal using ID.showModal() method -->

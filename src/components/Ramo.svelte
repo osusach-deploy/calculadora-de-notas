@@ -18,7 +18,6 @@
     let nombreInput = "";
     let min = 1;
     let max = 7;
-    let promedio = 1;
     let acumulador_ponderaciones = 0;
     let reload = 1;
 
@@ -35,10 +34,11 @@
     );
 
     // Calcular el porcentaje para el radial progress
-    $: porcentaje_promedio = promedio >= 1 ? ((promedio - 1) * 100) / 6 : 0;
+    $: porcentaje_promedio =
+        ramo.promedio >= 1 ? ((ramo.promedio - 1) * 100) / 6 : 0;
 
     // Cambiar la cantidad de evaluaciones cuando cambia evaluaciones
-    $: promedio = calcular_promedio(evaluaciones);
+    $: ramo.promedio = calcular_promedio(evaluaciones);
 
     function add_evaluacion() {
         evaluaciones.push({
@@ -54,7 +54,7 @@
     function pop_evaluacion(index = evaluaciones.length - 1) {
         if (index < 0) return;
 
-        evaluaciones.splice(index, 1);
+        evaluaciones.pop();
         evaluaciones = evaluaciones;
         ramoData.set(ramo);
     }
@@ -76,6 +76,11 @@
         evaluaciones.forEach((item) => {
             item.es_pendiente = false;
         });
+    }
+
+    function handleSliderChange() {
+        ramoData.set(ramo);
+        console.log("promedio");
     }
 
     // Revisa si hay al menos 1 nota pendiente
@@ -158,11 +163,11 @@
                 ></div>
                 <div
                     class="radial-progress border-4 border-success-content bg-success-content text-3xl"
-                    class:text-error={promedio < 4}
-                    class:text-success={promedio >= 4}
+                    class:text-error={ramo.promedio < 4}
+                    class:text-success={ramo.promedio >= 4}
                     style="--value:{porcentaje_promedio};--size:10rem;"
                 >
-                    {promedio.toFixed(2)}
+                    {ramo.promedio.toFixed(2)}
                 </div>
             </div>
         </div>
@@ -231,6 +236,7 @@
                     {max}
                     step="0.1"
                     bind:value={evaluacion.nota}
+                    on:change={handleSliderChange}
                 />
                 {#if !promedio_simple}
                     <div class="divider divider-neutral m-0">Ponderación</div>
@@ -245,6 +251,7 @@
                             max="1"
                             step="0.01"
                             bind:value={evaluacion.ponderacion}
+                            on:change={handleSliderChange}
                         />
                         <input
                             type="number"

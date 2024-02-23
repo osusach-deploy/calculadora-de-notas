@@ -10,6 +10,7 @@ export { calcular_notas_minimas, calcular_promedio };
 /**
  * @typedef Ramo
  * @property {String} nombre
+ * @property {Number} promedio
  * @property {Array<Evaluacion>} evaluaciones
  */
 
