@@ -143,11 +143,24 @@
 
 <!-- Open the modal using ID.showModal() method -->
 <dialog id="my_modal_5" class="modal modal-bottom sm:modal-middle">
-    <div class="modal-box">
+    <div class="modal-box neob-border">
         <h3 class="text-lg font-bold">Agregar ramo</h3>
+
         <div class="modal-action">
             <form method="dialog" class="flex w-full flex-col gap-4">
-                <p class="py-2">Ingresa el nombre del ramo:</p>
+                <button
+                    class="absolute right-4 top-2 neob-border neob-clickable p-2"
+                    aria-label="Close modal"
+                    on:click={() => {
+                        nombreInput = "";
+                    }}
+                    ><img
+                        class="h-5"
+                        src="/cross.svg"
+                        alt="Delete icon"
+                    /></button
+                >
+                <p class="py-2">Ingresa el nombre del ramo</p>
                 <div class="flex">
                     <TextInput
                         class="mr-2 rounded-none"
@@ -162,6 +175,7 @@
                         }}>Guardar</button
                     >
                 </div>
+                O importa un ramo
                 <div class="flex">
                     <TextInput
                         class="mr-2 rounded-none"

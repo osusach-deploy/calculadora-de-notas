@@ -4,6 +4,7 @@
     import Checkbox from "./Checkbox.svelte";
     import { ramoData } from "../store";
     import TextInput from "./TextInput.svelte";
+    import { jsonToCsv } from "./csv_export.js"
 
     /** @type {import('./calculadora').Ramo} */
     let ramo = {};
@@ -142,11 +143,7 @@
             <button
                 class="neob-clickable btn-sm z-20 mx-1 flex items-center gap-1 rounded-lg bg-accent px-3"
                 aria-label="Export ramo"
-                on:click={() => {
-                    const data = JSON.stringify(ramo);
-                    navigator.clipboard.writeText(data);
-                    alert("Ramo copiado al portapapeles");
-                }}
+                onclick="my_modal_6.showModal()"
             >
                 Exportar
                 <img class="h-5" src="/export.svg" alt="Export icon" />
@@ -216,7 +213,7 @@
                             evaluacion.nota = 1;
                             evaluacion.es_pendiente = !evaluacion.es_pendiente;
                         }}
-                        class="rounded-none bg-secondary"
+                        class="rounded-lg bg-secondary"
                         ><img
                             class="filter"
                             class:invert={evaluacion.es_pendiente}
@@ -269,28 +266,50 @@
     </ul>
 </div>
 
+
+
 <!-- Open the modal using ID.showModal() method -->
-<dialog id="my_modal_1" class="modal modal-bottom sm:modal-middle">
-    <div class="modal-box">
-        <h3 class="text-lg font-bold">Agregar ramo</h3>
-        <p class="py-4">Ingresa el nombre del ramo:</p>
-        <input
-            type="text"
-            bind:value={nombreInput}
-            placeholder="Nuevo ramo"
-            class="input"
-        />
+<dialog id="my_modal_6" class="modal modal-bottom sm:modal-middle">
+    <div class="modal-box neob-border">
+        <h3 class="text-lg font-bold">Exportar ramo</h3>
+
         <div class="modal-action">
-            <form method="dialog">
-                <!-- if there is a button in form, it will close the modal -->
+            <form method="dialog" class="flex flex-col w-full gap-4">
                 <button
-                    class="btn"
-                    on:click={() => {
-                        ramo.nombre = nombreInput;
-                        ramoData.set();
-                        nombreInput = "";
-                    }}>Guardar</button
+                    class="absolute right-4 top-2 neob-border neob-clickable p-2"
+                    aria-label="Close modal"
+                    ><img
+                        class="h-5"
+                        src="/cross.svg"
+                        alt="Delete icon"
+                    /></button
                 >
+                <p class="py-2">Cómo quieres exportar tu ramo:</p>
+                    <button
+                        class="neob-clickable w-1/2 bg-info p-2 text-primary-content self-center"
+                        on:click={() => {
+                            const data = JSON.stringify(ramo);
+                            navigator.clipboard.writeText(data);
+                            alert("Ramo copiado al portapapeles");
+                        }}>Copiar al portapapeles</button
+                    >
+                    <button
+                        class="neob-clickable flex w-1/2 h-10 items-center justify-center bg-accent text-accent-content self-center"
+                        aria-label="Import ramo"
+                        on:click={() => {
+                                    const data = jsonToCsv(ramo);
+                                    const blob = new Blob([data], { type: 'text/csv' });
+                                    const url = URL.createObjectURL(blob);
+                                    const link = document.createElement('a');
+                                    link.href = url;
+                                    link.download = 'ramo.csv';
+                                    link.click();
+                                    URL.revokeObjectURL(url);
+                                }}
+                    >
+                        Exportar como CSV
+                        <img class="h-6" src="/import.svg" alt="Import icon" />
+                    </button>
             </form>
         </div>
     </div>
