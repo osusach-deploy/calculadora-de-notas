@@ -150,7 +150,7 @@
             </button>
         </div>
         <div class="neob-border rounded-xl bg-base-200 p-10">
-            <div class="flex flex-col items-center px-14 pt-24 md:pt-0">
+            <div class="flex flex-col items-center px-14 pt-0">
                 <div
                     class="tooltip tooltip-warning before:w-40 md:before:w-60"
                     class:tooltip-open={!da_ponderacion}
