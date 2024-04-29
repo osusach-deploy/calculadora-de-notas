@@ -1,4 +1,4 @@
-export {jsonToCsv};
+export { jsonToCsv };
 
 function jsonToCsv(jsonData) {
     let csvString = jsonData.nombre + "," + jsonData.promedio + "\n";
@@ -6,7 +6,13 @@ function jsonToCsv(jsonData) {
     // Agregar los títulos de columnas para las evaluaciones
     csvString += `Nombre Evaluacion,Nota,Ponderacion\n`;
     jsonData.evaluaciones.forEach((evaluacion) => {
-        csvString += evaluacion.nombre + "," + evaluacion.nota + "," + evaluacion.ponderacion + "\n";
+        csvString +=
+            evaluacion.nombre +
+            "," +
+            evaluacion.nota +
+            "," +
+            evaluacion.ponderacion +
+            "\n";
     });
 
     return csvString;

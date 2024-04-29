@@ -4,7 +4,7 @@
     import Checkbox from "./Checkbox.svelte";
     import { ramoData } from "../store";
     import TextInput from "./TextInput.svelte";
-    import { jsonToCsv } from "./csv_export.js"
+    import { jsonToCsv } from "./csv_export.js";
 
     /** @type {import('./calculadora').Ramo} */
     let ramo = {};
@@ -134,6 +134,7 @@
             <TextInput
                 class="input-lg w-[20ch] text-center text-xl md:text-3xl"
                 bind:value={ramo.nombre}
+                ariaLabel="Cambiar nombre del ramo"
                 change={() => {
                     ramo.nombre = ramo.nombre ? ramo.nombre : "Nuevo Ramo";
                     ramoData.set(ramo);
@@ -241,7 +242,8 @@
                         class="flex flex-row place-content-evenly items-center gap-1"
                     >
                         <input
-                            id="ponderacion-{i}"
+                            id="ponderacion-{i}-slider"
+                            aria-label="Slider de ponderación"
                             class="neob-border range range-info range-md h-7 bg-base-100"
                             type="range"
                             min="0"
@@ -253,6 +255,7 @@
                         <input
                             type="number"
                             class="neob-border input input-sm h-7 w-[6ch] rounded-md p-0 text-center"
+                            aria-label="Cambiar ponderación"
                             id="ponderacion-{i}"
                             min="0"
                             max="1"
@@ -266,17 +269,15 @@
     </ul>
 </div>
 
-
-
 <!-- Open the modal using ID.showModal() method -->
 <dialog id="my_modal_6" class="modal modal-bottom sm:modal-middle">
-    <div class="modal-box neob-border">
+    <div class="neob-border modal-box">
         <h3 class="text-lg font-bold">Exportar ramo</h3>
 
         <div class="modal-action">
-            <form method="dialog" class="flex flex-col w-full gap-4">
+            <form method="dialog" class="flex w-full flex-col gap-4">
                 <button
-                    class="absolute right-4 top-2 neob-border neob-clickable p-2"
+                    class="neob-border neob-clickable absolute right-4 top-2 p-2"
                     aria-label="Close modal"
                     ><img
                         class="h-5"
@@ -285,31 +286,31 @@
                     /></button
                 >
                 <p class="py-2">Cómo quieres exportar tu ramo:</p>
-                    <button
-                        class="neob-clickable w-1/2 bg-info p-2 text-primary-content self-center"
-                        on:click={() => {
-                            const data = JSON.stringify(ramo);
-                            navigator.clipboard.writeText(data);
-                            alert("Ramo copiado al portapapeles");
-                        }}>Copiar al portapapeles</button
-                    >
-                    <button
-                        class="neob-clickable flex w-1/2 h-10 items-center justify-center bg-accent text-accent-content self-center"
-                        aria-label="Import ramo"
-                        on:click={() => {
-                                    const data = jsonToCsv(ramo);
-                                    const blob = new Blob([data], { type: 'text/csv' });
-                                    const url = URL.createObjectURL(blob);
-                                    const link = document.createElement('a');
-                                    link.href = url;
-                                    link.download = 'ramo.csv';
-                                    link.click();
-                                    URL.revokeObjectURL(url);
-                                }}
-                    >
-                        Exportar como CSV
-                        <img class="h-6" src="/import.svg" alt="Import icon" />
-                    </button>
+                <button
+                    class="neob-clickable w-1/2 self-center bg-info p-2 text-primary-content"
+                    on:click={() => {
+                        const data = JSON.stringify(ramo);
+                        navigator.clipboard.writeText(data);
+                        alert("Ramo copiado al portapapeles");
+                    }}>Copiar al portapapeles</button
+                >
+                <button
+                    class="neob-clickable flex h-10 w-1/2 items-center justify-center self-center bg-accent text-accent-content"
+                    aria-label="Import ramo"
+                    on:click={() => {
+                        const data = jsonToCsv(ramo);
+                        const blob = new Blob([data], { type: "text/csv" });
+                        const url = URL.createObjectURL(blob);
+                        const link = document.createElement("a");
+                        link.href = url;
+                        link.download = "ramo.csv";
+                        link.click();
+                        URL.revokeObjectURL(url);
+                    }}
+                >
+                    Exportar como CSV
+                    <img class="h-6" src="/import.svg" alt="Import icon" />
+                </button>
             </form>
         </div>
     </div>

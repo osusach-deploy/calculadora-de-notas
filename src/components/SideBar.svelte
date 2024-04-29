@@ -143,13 +143,13 @@
 
 <!-- Open the modal using ID.showModal() method -->
 <dialog id="my_modal_5" class="modal modal-bottom sm:modal-middle">
-    <div class="modal-box neob-border">
+    <div class="neob-border modal-box">
         <h3 class="text-lg font-bold">Agregar ramo</h3>
 
         <div class="modal-action">
             <form method="dialog" class="flex w-full flex-col gap-4">
                 <button
-                    class="absolute right-4 top-2 neob-border neob-clickable p-2"
+                    class="neob-border neob-clickable absolute right-4 top-2 p-2"
                     aria-label="Close modal"
                     on:click={() => {
                         nombreInput = "";
