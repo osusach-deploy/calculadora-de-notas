@@ -5,6 +5,7 @@
     import { ramoData } from "../store";
     import TextInput from "./TextInput.svelte";
     import { jsonToCsv } from "./csv_export.js";
+    import OptimalInput from "./OptimalInput.svelte";
 
     /** @type {import('./calculadora').Ramo} */
     let ramo = {};
@@ -13,10 +14,9 @@
     let evaluaciones = [];
     evaluaciones = ramo.evaluaciones === undefined ? [] : ramo.evaluaciones;
 
-    let promedio_simple = false,
-        da_ponderacion = true;
+    let promedio_simple = false;
+    let da_ponderacion = true;
 
-    let nombreInput = "";
     let min = 1;
     let max = 7;
     let acumulador_ponderaciones = 0;
@@ -31,6 +31,7 @@
                     ? evaluaciones
                     : ramo.evaluaciones;
             reload += 1;
+            promedio_simple = ramo.promedio_simple
         },
     );
 
@@ -39,11 +40,11 @@
         ramo.promedio >= 1 ? ((ramo.promedio - 1) * 100) / 6 : 0;
 
     // Cambiar la cantidad de evaluaciones cuando cambia evaluaciones
-    $: ramo.promedio = calcular_promedio(evaluaciones);
+    $: ramo.promedio = calcular_promedio(evaluaciones, ramo.nota_objetivo);
 
     function add_evaluacion() {
         evaluaciones.push({
-            nombre: "",
+            nombre: "PEP-" + (evaluaciones.length+1),
             nota: 1,
             ponderacion: 0.5,
             es_pendiente: false,
@@ -67,13 +68,15 @@
             });
             evaluaciones = evaluaciones;
         }
+        ramo.promedio_simple = promedio_simple
+        ramoData.set(ramo)
     }
 
     /**
      * Se ejecuta cuando se hace click al boton de calcular
      */
     function calc() {
-        evaluaciones = calcular_notas_minimas(evaluaciones);
+        evaluaciones = calcular_notas_minimas(evaluaciones, ramo.nota_objetivo);
         evaluaciones.forEach((item) => {
             item.es_pendiente = false;
         });
@@ -81,7 +84,6 @@
 
     function handleSliderChange() {
         ramoData.set(ramo);
-        console.log("promedio");
     }
 
     // Revisa si hay al menos 1 nota pendiente
@@ -103,7 +105,7 @@
     <div
         class="flex flex-col flex-wrap items-center justify-around gap-4 md:flex-row"
     >
-        <div class="neob-border flex flex-col gap-2 rounded-xl bg-base-200 p-5">
+        <div class="neob-border flex flex-col gap-2 rounded-xl bg-base-200 p-5 w-72">
             <p>Cantidad de Evaluaciones:</p>
             <NumberInput
                 id="cantidad"
@@ -112,20 +114,30 @@
                 bind:value={evaluaciones}
             />
             <Checkbox
-                class="m-1 bg-secondary px-2 py-3"
+                class="bg-secondary px-2 py-3"
                 bind:value={promedio_simple}>Promedio Simple</Checkbox
             >
             <div
-                class="tooltip-warning flex w-60 flex-col gap-2 text-warning-content"
+                class="tooltip-warning flex flex-row gap-2 text-warning-content w-full"
                 class:tooltip={hay_pendientes}
                 data-tip="No hay suficientes notas pendientes"
             >
                 <button
-                    class="neob-clickable disable-btn m-1 w-full rounded-md bg-primary px-2 py-4 text-primary-content"
+                    class="neob-clickable disable-btn rounded-md bg-primary px-2 py-4 w-full text-primary-content"
                     disabled={hay_pendientes}
                     on:click={calc}
                     >Calcular notas mínimas
                 </button>
+            </div>
+            <div class="flex flex-row justify-evenly items-center">
+
+                Nota objetivo:
+
+                <OptimalInput
+                    class="w-12 p-0 text-center"
+                    ariaLabel="Cambiar nota objetivo"
+                    bind:value={ramo.nota_objetivo}
+                />
             </div>
         </div>
         <div
@@ -236,7 +248,7 @@
                     bind:value={evaluacion.nota}
                     on:change={handleSliderChange}
                 />
-                {#if !promedio_simple}
+                {#if !ramo.promedio_simple}
                     <div class="divider divider-neutral m-0">Ponderación</div>
                     <div
                         class="flex flex-row place-content-evenly items-center gap-1"

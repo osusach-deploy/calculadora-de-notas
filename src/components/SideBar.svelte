@@ -17,15 +17,17 @@
         {
             nombre: "Nuevo Ramo",
             promedio: 1,
+            nota_objetivo: 4,
+            promedio_simple: false,
             evaluaciones: [
                 {
-                    nombre: "",
+                    nombre: "PEP-1",
                     nota: 1,
                     ponderacion: 0.5,
                     es_pendiente: false,
                 },
                 {
-                    nombre: "",
+                    nombre: "PEP-2",
                     nota: 1,
                     ponderacion: 0.5,
                     es_pendiente: false,
@@ -54,15 +56,17 @@
         data.push({
             nombre: nombre,
             promedio: 1,
+            nota_objetivo: 4,
+            promedio_simple: false,
             evaluaciones: [
                 {
-                    nombre: "",
+                    nombre: "PEP-1",
                     nota: 1,
                     ponderacion: 0.5,
                     es_pendiente: false,
                 },
                 {
-                    nombre: "",
+                    nombre: "PEP-2",
                     nota: 1,
                     ponderacion: 0.5,
                     es_pendiente: false,
