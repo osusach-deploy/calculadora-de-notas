@@ -4,6 +4,7 @@
     export let id = "";
     export let change = () => {};
     export let ariaLabel;
+    export let keydown = () => {};
 </script>
 
 <input
@@ -14,4 +15,5 @@
     aria-label={ariaLabel}
     class="neob-border input focus:border-black focus:outline-black {$$props.class}"
     bind:value
+    on:keydown={keydown}
 />

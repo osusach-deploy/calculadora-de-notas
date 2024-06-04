@@ -167,6 +167,13 @@
                 <p class="py-2">Ingresa el nombre del ramo</p>
                 <div class="flex">
                     <TextInput
+                        keydown={(event)=> {                            
+                            if (event.key == "Enter") {
+                                add_ramo(nombreInput ? nombreInput : "Nuevo Ramo");
+                                nombreInput = "";
+                            }
+                        }}
+                        ariaLabel="Cambiar nombre del ramo"
                         class="mr-2 rounded-none"
                         bind:value={nombreInput}
                         placeholder="Nuevo ramo"
